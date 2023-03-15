@@ -1,7 +1,7 @@
 from parsel import Selector
+from tech_news.database import create_news
 import requests
 import time
-from parsel import Selector
 
 
 # Requisito 1
@@ -22,7 +22,7 @@ def scrape_updates(html_content):
     selector = Selector(text=html_content)
     urls = selector.css("h2.entry-title a::attr(href)").getall()
 
-    return urls if urls else []
+    return urls
 
 
 # Requisito 3
@@ -30,11 +30,11 @@ def scrape_next_page_link(html_content):
     selector = Selector(text=html_content)
     url = selector.css("div.nav-links a.next::attr(href)").get()
 
-    return url if url else None
+    return url
 
 
 # Requisito 4
-def scrape_news(html_content: Selector):
+def scrape_news(html_content):
     selector = Selector(text=html_content)
 
     url = selector.css("link[rel=canonical]::attr(href)").get()
@@ -60,4 +60,20 @@ def scrape_news(html_content: Selector):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    home_html = fetch("https://blog.betrybe.com/")
+    news_links = scrape_updates(home_html)
+    news_data = []
+
+    while len(news_links) < amount:
+        next_page_link = scrape_next_page_link(home_html)
+        home_html = fetch(next_page_link)
+        new_links = scrape_updates(home_html)
+        news_links.extend(new_links)
+
+    for index in range(amount):
+        html = fetch(news_links[index])
+        news_content = scrape_news(html)
+        news_data.append(news_content)
+
+    create_news(news_data)
+    return news_data
