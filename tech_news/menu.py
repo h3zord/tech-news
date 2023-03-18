@@ -1,21 +1,40 @@
 import sys
+from tech_news.scraper import get_tech_news
+from tech_news.analyzer.ratings import top_5_categories
+from tech_news.analyzer.search_engine import (
+    search_by_title,
+    search_by_date,
+    search_by_category
+)
 
 
 # Requisitos 11 e 12
 def seed_database():
-    input("Digite quantas notícias serão buscadas: ")
+    option = int(input("Digite quantas notícias serão buscadas: "))
+    return get_tech_news(option)
 
 
 def get_title_news():
-    input("Digite o título: ")
+    option = (input("Digite o título: "))
+    return print(search_by_title(option))
 
 
 def get_date_news():
-    input("Digite a data no formato aaaa-mm-dd: ")
+    option = input("Digite a data no formato aaaa-mm-dd: ")
+    return print(search_by_date(option))
 
 
 def get_category_news():
-    input("Digite a categoria: ")
+    option = input("Digite a categoria: ")
+    return print(search_by_category(option))
+
+
+def list_top_categories():
+    return print(top_5_categories())
+
+
+def finish():
+    return print("Encerrando script")
 
 
 def analyzer_menu():
@@ -34,12 +53,14 @@ def analyzer_menu():
         "1": get_title_news,
         "2": get_date_news,
         "3": get_category_news,
+        "4": list_top_categories,
+        "5": finish
     }
 
     if option in msg_options:
-        return msg_options[option]()
+        try:
+            return msg_options[option]()
+        except Exception as msgError:
+            sys.stderr.write(msgError)
     else:
-        sys.stderr.write("Opção inválida")
-
-
-analyzer_menu()
+        sys.stderr.write("Opção inválida\n")
