@@ -3,19 +3,19 @@ import sys
 
 # Requisitos 11 e 12
 def seed_database():
-    option = input("Digite quantas notícias serão buscadas: ")
+    input("Digite quantas notícias serão buscadas: ")
 
 
 def get_title_news():
-    option = input("Digite o título: ")
+    input("Digite o título: ")
 
 
 def get_date_news():
-    option = input("Digite a data no formato aaaa-mm-dd: ")
+    input("Digite a data no formato aaaa-mm-dd: ")
 
 
 def get_category_news():
-    option = input("Digite a categoria: ")
+    input("Digite a categoria: ")
 
 
 def analyzer_menu():
